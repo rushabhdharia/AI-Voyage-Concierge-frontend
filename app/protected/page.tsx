@@ -1,7 +1,7 @@
 'use client'
  
 import { useRouter } from 'next/navigation'
-
+import NavBar from '../components/NavBar';
 
 const ProtectedPage = () => {
   const router = useRouter();
@@ -16,6 +16,7 @@ const ProtectedPage = () => {
   // You can now use the token to make authenticated requests to your API
   return (
     <div>
+      <NavBar/>
       <h1>Protected Page</h1>
       {/* ... */}
     </div>
