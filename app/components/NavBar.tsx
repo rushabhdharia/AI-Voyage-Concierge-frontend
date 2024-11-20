@@ -22,7 +22,7 @@ const Navbar = () => {
   <div className="flex-none">
     <ul className="menu menu-horizontal px-1">
       {hasToken && (
-        <li><button onClick={handleLogout}>Logout</button></li>    
+        <li><button className='btn btn-ghost' onClick={handleLogout}>Logout</button></li>    
       )}
       
     </ul>

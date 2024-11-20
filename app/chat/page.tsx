@@ -2,6 +2,7 @@
  
 import { useRouter } from 'next/navigation'
 import NavBar from '../components/NavBar';
+import ChatComponent from '../components/ChatComponent';
 
 const ProtectedPage = () => {
   const router = useRouter();
@@ -17,8 +18,7 @@ const ProtectedPage = () => {
   return (
     <div>
       <NavBar/>
-      <h1>Protected Page</h1>
-      {/* ... */}
+      <ChatComponent/>
     </div>
   );
 };
