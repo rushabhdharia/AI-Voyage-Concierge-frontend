@@ -13,22 +13,25 @@ const Navbar = () => {
   const hasToken = localStorage.getItem('token') !== null;
 
   return (
-    <nav className="navbar bg-base-100">
       <div className="navbar bg-base-100">
-  <div className="flex-1">
-    <Link href="/" className="btn btn-ghost text-xl">AI Travel Concierge</Link>
-  </div>
+  <div className="navbar-start">
+    <Link href="/home" className="btn btn-ghost text-xl">AI Travel Concierge</Link>
+    </div>
+  <div className="navbar-center">
+  <ul
+        className="menu">
+        <li><Link href="/travelItinerary">Create Travel Itinerary</Link></li>
+        <li><Link href="/locationInfo">Get Location Information</Link></li>
+        <li><Link href="/conversationHistory">Conversation History</Link></li>
+      </ul>
+    </div>
 
-  <div className="flex-none">
-    <ul className="menu menu-horizontal px-1">
+  <div className="navbar-end">
       {hasToken && (
-        <li><button className='btn btn-ghost' onClick={handleLogout}>Logout</button></li>    
-      )}
-      
-    </ul>
+        <button className='btn btn-ghost' onClick={handleLogout}>Logout</button>
+      )}   
   </div>
 </div>
-    </nav>
   );
 };
 
