@@ -15,8 +15,8 @@ const LoginForm = () => {
 
     if (token) {
       localStorage.setItem("token", token);
-      // Redirect to a protected page
-      window.location.href = "/protected";
+      // Redirect to a home page
+      window.location.href = "/home";
     } else {
       // Handle authentication errors
       console.error("Authentication failed");
