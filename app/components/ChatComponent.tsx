@@ -64,6 +64,7 @@ function ChatComponent() {
         }
       );
       console.log(requestBody);
+      console.log(response);
       const data = await response.json();
       console.log(data.response);
       setConversationId(data.conversationId);
@@ -74,8 +75,13 @@ function ChatComponent() {
         { role: "assistant", content: data.response },
       ]);
     } catch (error) {
+      console.log(error);
       console.error("Error:", error);
     }
+
+    setLocations("");
+    setNumberOfDays(0);
+    setFreeformText("");
   };
 
   return (
