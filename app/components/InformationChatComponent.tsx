@@ -41,12 +41,19 @@ function ChatForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const requestBody: ChatRequest = {
-      location,
-      freeformText,
-      selectedInformationTypes,
-      conversationId,
-    };
+    const requestBody: {
+      location? : string;
+      freeformText?: string;
+      informationTypes?: number[];
+      conversationId?: string;
+    } = {}
+
+    if (location) requestBody.location = location;
+    if (freeformText) requestBody.freeformText = freeformText;
+    if (selectedInformationTypes.length > 0) requestBody.informationTypes = selectedInformationTypes;
+    if (conversationId) requestBody.conversationId = conversationId;
+
+    console.log(requestBody);
 
     var content = "";
       if (location) content += location + " ";
@@ -90,7 +97,11 @@ function ChatForm() {
         body: JSON.stringify(requestBody),
       });
 
+      console.log(requestBody);
+      console.log(response);
+
       const data = await response.json();
+      console.log(data.response);
       setConversationId(data.conversationId);
       setMessages([
         ...messages,

@@ -1,9 +1,11 @@
 
 import Link from 'next/link';
+import Navbar from '../components/NavBar';
 
 const HomePage = () => {
   return (
     <div>
+      <Navbar/>
       <Link href="/travelItinerary">
         <button className='btn btn-primary'>Create Travel Itinerary</button>
       </Link>
