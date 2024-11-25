@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ChatRequest {
   location: string;
@@ -9,11 +9,11 @@ interface ChatRequest {
 
 interface Message {
   role: "user" | "assistant";
-  content: string;
+  messageValue: string;
 }
 
 
-function ChatForm() {
+function ChatForm({ id }: { id: string }) {
   const [location, setLocation] = useState('');
   const [freeformText, setFreeformText] = useState('');
   const [selectedInformationTypes, setSelectedInformationTypes] = useState<number[]>([]);
@@ -23,6 +23,27 @@ function ChatForm() {
   const token = localStorage.getItem("token");
 
   const [allSelected, setAllSelected] = useState(false);
+
+  useEffect(() => {
+    if (id!='') 
+    {
+      console.log(id);
+      // Fetch existing messages for the conversation
+      fetch(`https://localhost:7129/Ai/GetConversationById/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        setMessages([...data]);
+        setConversationId(id);
+      })
+      .catch(error => console.error('Error fetching messages:', error));
+    }
+  }, [id]);
 
   const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAllSelected(!allSelected);
@@ -83,7 +104,7 @@ function ChatForm() {
             break;
         }
       });
-    setMessages([...messages, { role: "user", content: content }]);
+    setMessages([...messages, { role: "user", messageValue: content }]);
       
     // Send the request to the API
     try {
@@ -105,8 +126,8 @@ function ChatForm() {
       setConversationId(data.conversationId);
       setMessages([
         ...messages,
-        { role: "user", content: content },
-        { role: "assistant", content: data.response },
+        { role: "user", messageValue: content },
+        { role: "assistant", messageValue: data.response },
       ]);
       // Update UI with the response
     } catch (error) {
@@ -132,7 +153,7 @@ function ChatForm() {
           >
             <div className="chat-bubble">
               {message.role === "user" ? "You:" : "Assistant:"}{" "}
-              {message.content}
+              {message.messageValue}
             </div>
           </div>
         ))}
