@@ -1,11 +1,13 @@
 'use client'
  
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams} from 'next/navigation'
 import NavBar from '../components/NavBar';
 import ChatComponent from '../components/ChatComponent';
 
 const ProtectedPage = () => {
   const router = useRouter();
+  const params = useSearchParams()
+
 
   const token = localStorage.getItem('token');
 
@@ -18,7 +20,7 @@ const ProtectedPage = () => {
   return (
     <div>
       <NavBar/>
-      <ChatComponent/>
+      <ChatComponent id={params.get('id') ?? ''}/>
     </div>
   );
 };

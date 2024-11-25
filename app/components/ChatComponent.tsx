@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface Message {
   role: "user" | "assistant";
-  content: string;
+  messageValue: string;
 }
 
-function ChatComponent() {
+function ChatComponent({ id }: { id: string }) {
   const [locationsInput, setLocations] = useState<string>("");
   const [numberOfDays, setNumberOfDays] = useState<number>(0);
   const [freeformText, setFreeformText] = useState<string>("");
@@ -13,6 +13,27 @@ function ChatComponent() {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (id!='') 
+    {
+      console.log(id);
+      // Fetch existing messages for the conversation
+      fetch(`https://localhost:7129/Ai/GetConversationById/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        setMessages([...data]);
+        setConversationId(id);
+      })
+      .catch(error => console.error('Error fetching messages:', error));
+    }
+  }, [id]);
 
   const handleSubmit = async () => {
 
@@ -51,7 +72,7 @@ function ChatComponent() {
       if (locations) content += locations + " ";
       if (numberOfDays) content += numberOfDays + " ";
       content += freeformText;
-      setMessages([...messages, { role: "user", content: content }]);
+      setMessages([...messages, { role: "user", messageValue: content }]);
       const response = await fetch(
         "https://localhost:7129/Ai/GetTravelItinerary",
         {
@@ -71,8 +92,8 @@ function ChatComponent() {
 
       setMessages([
         ...messages,
-        { role: "user", content: content },
-        { role: "assistant", content: data.response },
+        { role: "user", messageValue: content },
+        { role: "assistant", messageValue: data.response },
       ]);
     } catch (error) {
       console.log(error);
@@ -86,6 +107,7 @@ function ChatComponent() {
 
   return (
     <div>
+      {messages && (
       <div className="chat-container">
         {messages.map((message, index) => (
           <div
@@ -96,11 +118,11 @@ function ChatComponent() {
           >
             <div className="chat-bubble">
               {message.role === "user" ? "You:" : "Assistant:"}{" "}
-              {message.content}
+              {message.messageValue}
             </div>
           </div>
         ))}
-      </div>
+      </div> )}
       {conversationId ? (
         <>
           <label className="input input-bordered flex items-center gap-2">
